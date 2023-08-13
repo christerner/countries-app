@@ -1,214 +1,187 @@
-let searchBtn = document.querySelector("button");
-let searchBox = document.querySelector(".search-box");
-let filter = document.querySelector("#region");
-let viewRegion = document.querySelector(".view-region");
+fetchCountries = async () => {
+    const response = await fetch('https://restcountries.com/v2/all');
+    const myJson = await response.json(); //extract JSON from the http response
+    console.log(myJson);
+    localStorage['jsonData'] = JSON.stringify(myJson);
 
-let warning = document.querySelector(".search-info");
-
-let countriesContainer = document.querySelector(".countries-container");
-let countryContainer = document.querySelector(".view-country");
-
-const apiURL = `https://restcountries.com/v3.1/all`;
-
-async function getCountries(countries) {
-    countries.forEach(country => {
-
-        let countryCard = document.createElement('div');
-        countryCard.classList.add('info-details');
-        countryCard.innerHTML =
-            `  
-                    <img src="${country.flags.png}" alt="Country flag" class="flag-container" style="width: 220px; height: 120px;">
-                        <div class="country-name">${country.name.common}</div>
-                   
-                        <div class="more-info">
-                            <div class="info">
-                                <label for="">Population: </label>
-                                <div class="population">${country.population}</div>
-                            </div>
-                            <div class="info">
-                                <label for="">Region: </label>
-                                <div class="region">${country.region}</div>
-                            </div>
-                            <div class="info">
-                                <label for="">Capital: </label>
-                                <div class="capital">${country.capital}</div>
-                            </div>
-                        </div>  
-                
-            `
-        countriesContainer.appendChild(countryCard);
+    debugger
 
 
-        // Create view single country       
+    for (var i = 0; i < myJson.length; i++) {
+        const div = document.createElement('div');
+        div.classList.add('country-item');
 
-    //     countryCard.addEventListener("click", () => {
+        const img = document.createElement('img');
+        img.classList.add('flag');
+        img.setAttribute('src', myJson[i].flag);
+        img.setAttribute('alt', "flag-img");
 
-    //         countriesContainer.style.display = "none";
-    //         document.querySelector(".search-option").style.display = "none"
-    //         let viewCountry = document.createElement('div');
-    //         viewCountry.classList.add('info-details');
-    //         viewCountry.innerHTML =
-    //             `  
-    //         <img src="${country.flags.png}" alt="Country flag" class="flag-container" style="width: 440px; height: 240px;">
-    //             <div class="country-name">${country.name.common}</div>
-           
-    //             <div class="more-info">
-    //                 <div class="info">
-    //                     <label for="">Population: </label>
-    //                     <div class="population">${country.population}</div>
-    //                 </div>
-    //                 <div class="info">
-    //                     <label for="">Region: </label>
-    //                     <div class="region">${country.region}</div>
-    //                 </div>
-    //                 <div class="info">
-    //                     <label for="">Subregion: </label>
-    //                     <div class="region">${country.subregion}</div>
-    //                 </div>
-    //                 <div class="info">
-    //                     <label for="">Capital: </label>
-    //                     <div class="capital">${country.capital}</div>
-    //                 </div>
-    //                 <div class="info">
-    //                     <label for="">Languages: </label>
-    //                     <div class="capital">${Object.values(country.languages).toString().split(",").join(", ")}</div>
-    //                 </div>
-    //                 <div class="info">
-    //                     <label for="">Currencies: </label>
-    //                     <div class="capital">${country.currencies[Object.keys(country.currencies)].name +
-    //             ", " + Object.keys(country.currencies)[0]}</div>
-    //                 </div>
-                    
-    //             </div>
-    //             <a href="index.html">  
-    //             <button class="back">Back</button> 
-    //             </a>    
-    // `
-    //         countryContainer.appendChild(viewCountry);
-        // })
-    });
-}
-// Search for a country
-// async function getData(country) {
-//     const apiURL = `https://restcountries.com/v3.1/name/${country}?fullText=true`;
+        const h3 = document.createElement('h3');
+        h3.textContent = myJson[i].name;
 
-//     if (searchBox.value == "") {
-//         warning.innerHTML = "Please enter country name";
+        var li_list = ["Population", "Region", "Capital"];
+        var li_values = [myJson[i].population, myJson[i].region, myJson[i].capital];
 
-//     }
-//     else {
-//         try {
-//             countriesContainer.style.display = "none";
-//             warning.innerHTML = "<img src = './img/loading.gif'/>";
+        const ul = document.createElement('ul');
 
-//             let response = await fetch(apiURL);
-//             let country = await response.json();
-//             warning.innerHTML = "";
-//             document.querySelector(".search-option").style.display = "none"
-//             let viewCountry = document.createElement('div');
-//             viewCountry.classList.add('info-details');
-//             viewCountry.innerHTML =
-//                 `  
-//             <img src="${country[0].flags.png}" alt="Country flag" class="flag-container" style="width: 440px; height: 240px;">
-//                 <div class="country-name">${country[0].name.common}</div>
-           
-//                 <div class="more-info">
-//                     <div class="info">
-//                         <label for="">Population: </label>
-//                         <div class="population">${country[0].population}</div>
-//                     </div>
-//                     <div class="info">
-//                         <label for="">Region: </label>
-//                         <div class="region">${country[0].region}</div>
-//                     </div>
-//                     <div class="info">
-//                         <label for="">Subregion: </label>
-//                         <div class="region">${country[0].subregion}</div>
-//                     </div>
-//                     <div class="info">
-//                         <label for="">Capital: </label>
-//                         <div class="capital">${country[0].capital}</div>
-//                     </div>
-//                     <div class="info">
-//                         <label for="">Languages: </label>
-//                         <div class="capital">${Object.values(country[0].languages).toString().split(",").join(", ")}</div>
-//                     </div>
-//                     <div class="info">
-//                         <label for="">Currencies: </label>
-//                         <div class="capital">${country[0].currencies[Object.keys(country[0].currencies)].name +
-//                 ", " + Object.keys(country[0].currencies)[0]}</div>
-//                     </div>
-                    
-//                 </div>   
-//                 <a href="index.html">  
-//                 <button class="back">Back</button> 
-//                 </a>     
-//     `
-//             countryContainer.appendChild(viewCountry);
-            
-//         } catch (error) {
-//             warning.innerHTML = "Data not found"
-//             countriesContainer.style.display = "flex";
-
-//         }
-//     }
-// }
-
-// Filter by region
-
-// async function getFiltered(region) {
-//     let results = await fetch(`https://restcountries.com/v3.1/region/${region}`);
-//     let data = await results.json();    
-//     console.log(data);
-
-//     let countryCard = document.createElement('div');
-//     countriesContainer.style.display ="none";
-//     countryContainer.style.display ="none";
-//         countryCard.classList.add('info-details');
-//         countryCard.innerHTML =
-//             `  
-//                     <img src="${data.flag}" alt="Country flag" class="flag-container" style="width: 220px; height: 120px;">
-//                         <div class="country-name">${data.name}</div>
-                   
-//                         <div class="more-info">
-//                             <div class="info">
-//                                 <label for="">Population: </label>
-//                                 <div class="population">${data.population}</div>
-//                             </div>
-//                             <div class="info">
-//                                 <label for="">Region: </label>
-//                                 <div class="region">${data.region}</div>
-//                             </div>
-//                             <div class="info">
-//                                 <label for="">Capital: </label>
-//                                 <div class="capital">${data.capital}</div>
-//                             </div>
-//                         </div>  
-                
-//             `
-//         viewRegion.appendChild(countryCard);
-// }
-// filter.addEventListener("click", () => {
-//     getFiltered(filter.value)
-// })
-
-// searchBtn.addEventListener("click", () => {
-//     let countryName = document.querySelector("input").value;
-//     getData(countryName)
-//     console.log(countryName);
-// });
-
-window.onload = fetch(apiURL)
-    .then(response => {
-        if (!response.ok) {
-            throw Error(response.statusText);
+        for (var j = 0; j < li_list.length; j++) {
+            const li = document.createElement('li');
+            li.textContent = li_list[j] + ": " + li_values[j];
+            ul.appendChild(li);
         }
-        return response.json();
+
+
+        div.appendChild(img);
+        div.appendChild(h3);
+        div.appendChild(ul);
+
+        div.addEventListener('click', function (e) {
+            displayCountryDetails(e, myJson);
+        })
+
+        var c_box = document.querySelector('#countries-box');
+        c_box.appendChild(div);
+
+        // if (i === 10) {
+        //     return;
+        // }
+    }
+
+    console.log(c_box);
+}
+
+fetchCountries();
+
+debugger
+const search = document.forms['input-form'].querySelector('input');
+search.addEventListener('keyup', function (e) {
+    const searchTerm = e.target.value.toLowerCase();
+    const countries = document.getElementsByTagName('h3');
+
+    document.getElementById('regions').selectedIndex = 0;
+
+    Array.from(countries).forEach(function (country) {
+        if (country.innerText.toLowerCase().indexOf(searchTerm) != -1) {
+            country.parentElement.style.display = "block";
+        } else {
+            country.parentElement.style.display = "none";
+        }
     })
-    .then(res => {
-        getCountries(res);
-        console.log(res);
-    })
-    .catch(err => {
-        console.log(err);
-    })
+})
+
+function selectRegions() {
+    const list = document.getElementById('regions');
+    debugger
+
+    document.getElementById('search').value = "";
+
+    const selected_region = list.options[list.selectedIndex].text.toLowerCase();
+
+    const regions = document.getElementsByTagName('li');
+
+    for (var i = 1; i < regions.length; i += 3) {
+        if (regions[i].innerText.toLowerCase().indexOf(selected_region) != -1) {
+            regions[i].parentElement.parentElement.style.display = "block";
+        } else {
+            regions[i].parentElement.parentElement.style.display = "none";
+        }
+    }
+
+    console.log(list);
+}
+
+function displayCountryDetails(e, myJson) {
+    
+    // console.log(myJson);
+
+    var main = document.getElementsByClassName('main');
+    var section = document.getElementsByClassName('details-section');
+
+    debugger
+    if (e.target.tagName === "IMG" || e.target.tagName === "H3" || e.target.tagName === "UL") {
+        var parent = e.target.parentElement;
+        var children = parent.children;
+        // console.log("JSON"+ myJson);
+        main[0].style.display = "none";
+        section[0].style.display = "block";
+
+        setData(myJson, children, section, false);
+
+    } else if (e.target.tagName === "LI") {
+        var parent = e.target.parentElement.parentElement;
+        var children = parent.children;
+        main[0].style.display = "none";
+        section[0].style.display = "block";
+
+        setData(myJson, children, section, false);
+
+    }
+}
+
+function setData(myJson, children, section, recursion) {
+    debugger
+    var textgrid = document.getElementsByClassName('text-grid');
+    textgrid[0].style.display = "grid";
+    for (var i = 0; i < myJson.length; i++) {
+        if (myJson[i].name.toLowerCase() === (recursion ? children.toLowerCase() : children[1].innerText.toLowerCase())) {
+            section[0].querySelectorAll('h3')[0].innerText = myJson[i].name;
+            section[0].querySelectorAll('img')[0].src = myJson[i].flag;
+            section[0].querySelectorAll('img')[0].alt = "flag-image";
+            section[0].querySelectorAll('.native-name')[0].innerText = myJson[i].nativeName;
+            section[0].querySelectorAll('.region')[0].innerText = myJson[i].region;
+            if(myJson[i] && myJson[i].capital){
+                section[0].querySelectorAll('.capital')[0].innerText = myJson[i].capital;
+            }else{
+                section[0].querySelectorAll('.capital')[0].innerText = "";
+            }
+            
+            if(myJson[i] && myJson[i].currencies){
+                section[0].querySelectorAll('.currencies')[0].innerText = myJson[i].currencies[0].name;
+            }else{
+                section[0].querySelectorAll('.currencies')[0].innerText = "";
+            }     
+            section[0].querySelectorAll('.population')[0].innerText = myJson[i].population;
+            section[0].querySelectorAll('.sub-region')[0].innerText = myJson[i].subregion;
+            section[0].querySelectorAll('.tld')[0].innerText = myJson[i].topLevelDomain[0];
+            section[0].querySelectorAll('.languages')[0].innerText = myJson[i].languages[0].name;
+
+            var nearbyCountryCodes = myJson[i].borders;
+            var nearbyCountries = [];
+
+            debugger
+            if(myJson[i] && myJson[i].borders){
+                for (var j = 0; j < myJson.length; j++) {
+                    for (k = 0; k < nearbyCountryCodes.length; k++) {
+                        if (myJson[j].alpha3Code === nearbyCountryCodes[k]) {
+                            nearbyCountries.push(myJson[j].name);
+                        }
+                    }
+                }
+            }else{
+                nearbyCountries.push("I do not have any borders!");
+            }
+            
+
+            const ul = document.getElementById('neighboring-countries')
+            ul.innerHTML = '';
+
+            // if(nearbyCountryCodes.length === 0) {
+            //     return;
+            // }
+
+            for (var j = 0; j < nearbyCountries.length; j++) {
+                var li = document.createElement('li');
+                li.textContent = nearbyCountries[j];
+
+                li.addEventListener('click', function (e) {
+                    // debugger
+                    setData(myJson, e.target.innerText, section, true);
+                })
+
+                ul.appendChild(li);
+            }
+
+            console.log(nearbyCountries);
+        }
+    }
+}
