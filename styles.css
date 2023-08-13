@@ -1,90 +1,64 @@
-* {
-    padding: 0;
-    margin: 0;
+body {
+    margin: 4px;
+    padding: 8px;
     box-sizing: border-box;
+    
 }
-
-header {
+.header {
     display: flex;
     justify-content: space-between;
-    margin: 18px 24px;    
+    align-items: center;
+    margin: 12px 24px;    
 }
-hr {
-    margin-bottom: 8px;
-    
-    
-}
-
-.search-option {
+.main {
     display: flex;
-    justify-content: space-evenly;
-    margin: 0 68px;  
-}
-.search-box {
-    width: max-content;
-    height: 40px;
-    padding-left: 12px;
-    font-size: 14px;
-    border: 2px solid gray;
-    border-radius: 6px;    
+    justify-content: center;
+    align-items: center; 
+    flex-direction: column;
     
 }
-button {
-    width:60px;;
-    height: 40px;
-    border: 2px solid gray;
-    border-radius: 6px;
+input, select {
+    height: 36px;
+    margin-left: 160px;
+    margin-bottom: 8px;
+    border: 2px solid grey;    
+    border-radius: 4px;
 }
-.filter-by {
-    width: max-content;
-    font-size: 14px;
-    border: 2px solid gray;
-    border-radius: 6px;
-    gap: 50%;
-}
-.search-info {
-    font-size: 24px; 
-    color: red; 
-    text-align: center;
-    
-}
-.countries-container {
+.countries-box {
     display: flex;
     justify-content: center;
     align-items: center;    
     flex-wrap: wrap;
     margin: 12px 0;
 }
-
-img {    
+img {
+    width: 220px;
+    height: 120px;
     margin-bottom: 12px;
     object-fit: cover;
 }
-.country-name {
-    font-size: 20px;
-    font-weight: bolder;
-
+h3 {
+    margin-top: 4px;
 }
-
-.info-details {
+ul {
+    list-style-type: none;
+    text-align: justify;
+    margin-top: 0;
+}
+.country-item {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    margin: 12px;   
+    margin: 8px 6px;
     
 }
-.info {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 12px ;
-    gap: 12px;
-    font-size: 18px;    
+.country-item h3 {
+    text-align: center;
 }
 
-.back {
-    width: 120px;
-    font-size: large;
-    align-self: center;
+.country-item ul li {
+    text-align: center;
+    
+    padding: 8px 0;    
 }
